@@ -31,6 +31,8 @@
 # for a list of all weatherstations http://www.knmi.nl/climatology/daily_data/selection.cgi)
 #
 # for an explanation of script access http://www.knmi.nl/kd/daggegevens/scriptxs-nl.html
+#
+#
 
 import urllib2
 import csv
@@ -41,7 +43,7 @@ import logging.handlers
 import sys
 import datetime
 
-WEATHERSTATION = '344' 
+STATION_CODE   = '344' 
 STARTINGDATE   = '20121001'
 
 MYSQL_SERVER   = 'server'
@@ -50,7 +52,7 @@ MYSQL_PASSWORD = 'password'
 MYSQL_DATABASE = 'databasename'
 
 REQUEST_URL    = 'http://www.knmi.nl/klimatologie/daggegevens/getdata_dag.cgi'
-REQUEST_DATA   = 'stns='+WEATHERSTATION+'&vars=ALL&start='+STARTINGDATE #+'&end='+einddatum
+REQUEST_DATA   = 'stns='+STATION_CODE+'&vars=ALL&start='+STARTINGDATE #+'&end='+einddatum
 
 def skip_comments(iterable):
     for line in iterable:
@@ -88,12 +90,6 @@ def check_value(value):
         return str(int(value))
               
 def insert_database(row):
-    
-    try:
-        db = MySQLdb.connect(MYSQL_SERVER, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)  
-        cursor = db.cursor()
-        
-        def insert_database(row):
     
     try:
         db = MySQLdb.connect(MYSQL_SERVER, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)  
