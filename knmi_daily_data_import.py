@@ -39,6 +39,7 @@ import datetime
 import logging
 import logging.handlers
 import sys
+import datetime
 
 WEATHERSTATION = '344' 
 STARTINGDATE   = '20121001'
@@ -78,8 +79,21 @@ def log(text):
         logger.debug(text)
     except NameError:
         pass
-        
+
+# return checked value as string
+def check_value(value):
+    if len(value) < 1:
+        return str(0)
+    else:
+        return str(int(value))
+              
 def insert_database(row):
+    
+    try:
+        db = MySQLdb.connect(MYSQL_SERVER, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)  
+        cursor = db.cursor()
+        
+        def insert_database(row):
     
     try:
         db = MySQLdb.connect(MYSQL_SERVER, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)  
@@ -87,45 +101,45 @@ def insert_database(row):
         
         query = "INSERT IGNORE INTO " + MYSQL_DATABASE + ".weather_data VALUES ('" + \
                     row['YYYYMMDD'] + "\',\'" + \
-                    row['STN'] + "\',\'" + \
-                    row['DVEC'] + "\',\'" + \
-                    row['FHVEC'] + "\',\'" + \
-                    row['FG'] + "\',\'" + \
-                    row['FHX'] + "\',\'" + \
-                    row['FHXH'] + "\',\'" + \
-                    row['FXX'] + "\',\'" + \
-                    row['FXXH'] + "\',\'" + \
-                    row['TG'] + "\',\'" + \
-                    row['TN'] + "\',\'" + \
-                    row['TNH'] + "\',\'" + \
-                    row['TX'] + "\',\'" + \
-                    row['TXH'] + "\',\'" + \
-                    row['T10N'] + "\',\'" + \
-                    row['T10NH'] + "\',\'" + \
-                    row['SQ'] + "\',\'" + \
-                    row['SP'] + "\',\'" + \
-                    row['Q'] + "\',\'" + \
-                    row['DR'] + "\',\'" + \
-                    row['RH'] + "\',\'" + \
-                    row['RHX'] + "\',\'" + \
-                    row['RHXH'] + "\',\'" + \
-                    row['PG'] + "\',\'" + \
-                    row['PX'] + "\',\'" + \
-                    row['PXH'] + "\',\'" + \
-                    row['PN'] + "\',\'" + \
-                    row['PNH'] + "\',\'" + \
-                    row['VVN'] + "\',\'" + \
-                    row['VVNH'] + "\',\'" + \
-                    row['VVX'] + "\',\'" + \
-                    row['VVXH'] + "\',\'" + \
-                    row['NG'] + "\',\'" + \
-                    row['UG'] + "\',\'" + \
-                    row['UX'] + "\',\'" + \
-                    row['UXH'] + "\',\'" + \
-                    row['UN'] + "\',\'" + \
-                    row['UNH'] + "\',\'" + \
-                    row['EV24'] + "\',\'" + \
-                    row['YYYYMMDD'] + "\')"
+                    check_value(row['STN']) + "\',\'" + \
+                    check_value(row['DVEC']) + "\',\'" + \
+                    check_value(row['FHVEC']) + "\',\'" + \
+                    check_value(row['FG']) + "\',\'" + \
+                    check_value(row['FHX']) + "\',\'" + \
+                    check_value(row['FHXH']) + "\',\'" + \
+                    check_value(row['FXX']) + "\',\'" + \
+                    check_value(row['FXXH']) + "\',\'" + \
+                    check_value(row['TG']) + "\',\'" + \
+                    check_value(row['TN']) + "\',\'" + \
+                    check_value(row['TNH']) + "\',\'" + \
+                    check_value(row['TX']) + "\',\'" + \
+                    check_value(row['TXH']) + "\',\'" + \
+                    check_value(row['T10N']) + "\',\'" + \
+                    check_value(row['T10NH']) + "\',\'" + \
+                    check_value(row['SQ']) + "\',\'" + \
+                    check_value(row['SP']) + "\',\'" + \
+                    check_value(row['Q']) + "\',\'" + \
+                    check_value(row['DR']) + "\',\'" + \
+                    check_value(row['RH']) + "\',\'" + \
+                    check_value(row['RHX']) + "\',\'" + \
+                    check_value(row['RHXH']) + "\',\'" + \
+                    check_value(row['PG']) + "\',\'" + \
+                    check_value(row['PX']) + "\',\'" + \
+                    check_value(row['PXH']) + "\',\'" + \
+                    check_value(row['PN']) + "\',\'" + \
+                    check_value(row['PNH']) + "\',\'" + \
+                    check_value(row['VVN']) + "\',\'" + \
+                    check_value(row['VVNH']) + "\',\'" + \
+                    check_value(row['VVX']) + "\',\'" + \
+                    check_value(row['VVXH']) + "\',\'" + \
+                    check_value(row['NG']) + "\',\'" + \
+                    check_value(row['UG']) + "\',\'" + \
+                    check_value(row['UX']) + "\',\'" + \
+                    check_value(row['UXH']) + "\',\'" + \
+                    check_value(row['UN']) + "\',\'" + \
+                    check_value(row['UNH']) + "\',\'" + \
+                    check_value(row['EV24']) + "\',\'" + \
+                    datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "\')"
         cursor.execute(query)
         db.commit()        
     
