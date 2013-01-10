@@ -3,7 +3,7 @@
 #
 # ----------------------------------------------------------------------------
 #   
-#   knmi_daily_data_import.py
+#   knmi_hourly_data_import.py
 #   
 #   Copyright (C) 2013 George Henze
 #   
@@ -42,15 +42,15 @@ import sys
 import datetime
 
 STATION_CODE   = '344' 
-STARTINGDATE   = '20121001'
+STARTINGDATE   = '2012100101'
 
 MYSQL_SERVER   = 'server'
 MYSQL_USER     = 'user'
 MYSQL_PASSWORD = 'password'
 MYSQL_DATABASE = 'databasename'
 
-REQUEST_URL    = 'http://www.knmi.nl/klimatologie/daggegevens/getdata_dag.cgi'
-REQUEST_DATA   = 'stns='+STATION_CODE+'&vars=ALL&start='+STARTINGDATE #+'&end='+einddatum
+REQUEST_URL    = 'http://www.knmi.nl/klimatologie/uurgegevens/getdata_uur.cgi '
+REQUEST_DATA   = 'stns='+STATION_CODE+'&vars=WIND:TEMP:SUNR:PRCP:VICL&start='+STARTINGDATE #+'&end='+einddatum
 
 def skip_comments(iterable):
     for line in iterable:
@@ -93,53 +93,29 @@ def insert_database(row):
         db = MySQLdb.connect(MYSQL_SERVER, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)  
         cursor = db.cursor()
         
-        query = "INSERT IGNORE INTO " + MYSQL_DATABASE + ".weather_daily_data VALUES ('" + \
-                    row['YYYYMMDD'] + "\',\'" + \
+        query = "INSERT IGNORE INTO " + MYSQL_DATABASE + ".weather_hourly_data VALUES ('" + \
                     check_value(row['STN']) + "\',\'" + \
-                    check_value(row['DVEC']) + "\',\'" + \
-                    check_value(row['FHVEC']) + "\',\'" + \
-                    check_value(row['FG']) + "\',\'" + \
-                    check_value(row['FHX']) + "\',\'" + \
-                    check_value(row['FHXH']) + "\',\'" + \
-                    check_value(row['FXX']) + "\',\'" + \
-                    check_value(row['FXXH']) + "\',\'" + \
-                    check_value(row['TG']) + "\',\'" + \
-                    check_value(row['TN']) + "\',\'" + \
-                    check_value(row['TNH']) + "\',\'" + \
-                    check_value(row['TX']) + "\',\'" + \
-                    check_value(row['TXH']) + "\',\'" + \
-                    check_value(row['T10N']) + "\',\'" + \
-                    check_value(row['T10NH']) + "\',\'" + \
+                    row['YYYYMMDD'] + "\',\'" + \
+                    check_value(row['HH']) + "\',\'" + \
+                    check_value(row['DD']) + "\',\'" + \
+                    check_value(row['FH']) + "\',\'" + \
+                    check_value(row['FF']) + "\',\'" + \
+                    check_value(row['FX']) + "\',\'" + \
+                    check_value(row['T']) + "\',\'" + \
+                    check_value(row['T10']) + "\',\'" + \
+                    check_value(row['TD']) + "\',\'" + \
                     check_value(row['SQ']) + "\',\'" + \
-                    check_value(row['SP']) + "\',\'" + \
                     check_value(row['Q']) + "\',\'" + \
                     check_value(row['DR']) + "\',\'" + \
-                    check_value(row['RH']) + "\',\'" + \
-                    check_value(row['RHX']) + "\',\'" + \
-                    check_value(row['RHXH']) + "\',\'" + \
-                    check_value(row['PG']) + "\',\'" + \
-                    check_value(row['PX']) + "\',\'" + \
-                    check_value(row['PXH']) + "\',\'" + \
-                    check_value(row['PN']) + "\',\'" + \
-                    check_value(row['PNH']) + "\',\'" + \
-                    check_value(row['VVN']) + "\',\'" + \
-                    check_value(row['VVNH']) + "\',\'" + \
-                    check_value(row['VVX']) + "\',\'" + \
-                    check_value(row['VVXH']) + "\',\'" + \
-                    check_value(row['NG']) + "\',\'" + \
-                    check_value(row['UG']) + "\',\'" + \
-                    check_value(row['UX']) + "\',\'" + \
-                    check_value(row['UXH']) + "\',\'" + \
-                    check_value(row['UN']) + "\',\'" + \
-                    check_value(row['UNH']) + "\',\'" + \
-                    check_value(row['EV24']) + "\',\'" + \
+                    check_value(row['VV']) + "\',\'" + \
+                    check_value(row['N']) + "\',\'" + \
+                    check_value(row['U']) + "\',\'" + \
                     datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "\')"
         cursor.execute(query)
         db.commit()        
-    
+        
     except MySQLdb.Error, e:
         log("Database error %d: %s" % (e.args[0], e.args[1]))
-        sys.exit(1)
 
 def main():
 
@@ -157,13 +133,13 @@ def main():
         
     log('Data received') 
     
-    fields = ('STN','YYYYMMDD','DVEC','FHVEC','FG','FHX','FHXH','FHN','FHNH','FXX','FXXH','TG','TN','TNH','TX','TXH','T10N','T10NH','SQ','SP','Q','DR','RH','RHX','RHXH','PG','PX','PXH','PN','PNH','VVN','VVNH','VVX','VVXH','NG','UG','UX','UXH','UN','UNH','EV24')
+    fields = ('STN','YYYYMMDD','HH','DD','FH','FF','FX','T','T10','TD','SQ','Q','DR','VV','N','U')
     delimiter = ','
-    
+        
     reader = csv.DictReader(skip_comments(serv_resp), delimiter=delimiter, fieldnames=fields, skipinitialspace=True)
     
     log('Inserting records into database')
-    
+
     for row in reader:
         insert_database(row)
 
