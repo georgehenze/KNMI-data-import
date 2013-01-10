@@ -1,6 +1,6 @@
 delimiter $$
 
-CREATE TABLE `weather_data` (
+CREATE TABLE `weather_daily_data` (
   `DATUM` datetime DEFAULT NULL,
   `STN` int(11) DEFAULT NULL,
   `DVEC` int(11) DEFAULT NULL,
@@ -43,4 +43,28 @@ CREATE TABLE `weather_data` (
   `INSERTED` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY `DATUM_UNIQUE` (`DATUM`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1$$
+
+
+delimiter $$
+
+CREATE TABLE `weather_hourly_data` (
+  `STN` int(11) DEFAULT NULL,
+  `DATUM` datetime DEFAULT NULL,
+  `HH` int(11) DEFAULT NULL,
+  `DD` int(11) DEFAULT NULL,
+  `FH` int(11) DEFAULT NULL,
+  `FF` int(11) DEFAULT NULL,
+  `FX` int(11) DEFAULT NULL,
+  `T` int(11) DEFAULT NULL,
+  `T10` int(11) DEFAULT NULL,
+  `TD` int(11) DEFAULT NULL,
+  `SQ` int(11) DEFAULT NULL,
+  `Q` int(11) DEFAULT NULL,
+  `DR` int(11) DEFAULT NULL,
+  `VV` int(11) DEFAULT NULL,
+  `N` int(11) DEFAULT NULL,
+  `U` int(11) DEFAULT NULL,
+  `INSERTED` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1$$
+
 
