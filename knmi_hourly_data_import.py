@@ -42,7 +42,6 @@ import sys
 import datetime
 
 STATION_CODE   = '344' 
-STARTINGDATE   = '2012100101'
 #STARTINGDATE   = '2012100101'
 STARTINGDATE   = datetime.datetime.now().strftime('%Y') + '010101'
 
@@ -118,8 +117,8 @@ def insert_database(row):
         
     except MySQLdb.Error, e:
         log("Database error %d: %s" % (e.args[0], e.args[1]))
-
         sys.exit(1)
+        
 def main():
 
     log('Running knmi_daily_data_import.py')
